@@ -1,0 +1,40 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+
+
+Client -> SqlSessionFactoryBuilder : build
+activate SqlSessionFactoryBuilder
+
+SqlSessionFactoryBuilder -> XMLConfigBuilder:new
+activate XMLConfigBuilder
+
+XMLConfigBuilder -> XPathParser : new
+activate XPathParser
+
+XPathParser -> XMLMapperEntityResolver : new
+XMLMapperEntityResolver -> XPathParser : return as parameter
+
+XPathParser -> XPathParser: commonConstructor():\r\n 属性entityResolver 赋值为XMLMapperEntityResolver
+
+XPathParser -> XPathParser: createDocument(new InputSource(inputStream))： 赋值document
+
+XPathParser -> XMLConfigBuilder: 构造器复用
+
+XMLConfigBuilder -> Configuration: <font color=red>新建一个默认的Configuration</font>
+
+XMLConfigBuilder -> BaseBuilder: super(new Configuration())
+
+BaseBuilder -> BaseBuilder: 1.typeAliasRegistry 赋值 \r\n 2.typeHandlerRegistry 赋值
+
+
+XMLConfigBuilder -> SqlSessionFactoryBuilder:
+
+SqlSessionFactoryBuilder -> XMLConfigBuilder : XMLConfigBuilder parser.parse() <font color=red>解析出Configuration</font>
+
+
+XMLConfigBuilder -> XMLConfigBuilder: parseConfiguration: <font color=red>解析各个节点的并放到Configuration中</font>
+
+
+
+
+@enduml
